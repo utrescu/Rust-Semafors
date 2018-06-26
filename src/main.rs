@@ -41,16 +41,9 @@ fn calcula_semafors(mut semafors: String) -> u32 {
 
     // println!("... Buscant {}", semafors);
 
-    loop {
-        match elimina(semafors, "RAV") {
-            Ok(s) => {
-                semafors = s;
-                count_semaphors += 1;
-            }
-            Err(_) => {
-                break;
-            }
-        }
+    while let Some(s) = elimina(semafors, "RAV") {
+        semafors = s;
+        count_semaphors += 1;
     }
     count_semaphors
 }
@@ -60,20 +53,20 @@ fn calcula_semafors(mut semafors: String) -> u32 {
  *
  * Si no els troba tots retorna zero.
  */
-fn elimina(semafors: String, caracters: &str) -> Result<String, u8> {
-    let mut result = String::new();
+fn elimina(semafors: String, caracters: &str) -> Option<String> {
+    let mut result_string = String::new();
     let mut index = 0;
 
     for car in semafors.chars() {
         if index < 3 && car == caracters.chars().nth(index).unwrap() {
             index += 1;
         } else {
-            result.push(car);
+            result_string.push(car);
         }
     }
 
     match index == 3 {
-        true => Result::Ok(result),
-        false => Result::Err(0),
+        true => Some(result_string),
+        false => None,
     }
 }
